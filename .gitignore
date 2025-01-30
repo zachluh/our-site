@@ -25,4 +25,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/static
+/our-site-backend/static
+/our-site/.env
