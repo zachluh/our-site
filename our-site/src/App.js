@@ -15,11 +15,19 @@ function App() {
   const [passwordInputVisible, setPasswordInputVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState('');
+  const [filterChecklistVisisble, setFilterChecklistVisible] = useState(false);
   const currentUserRef = useRef(currentUser);
+
   const colors = {
     Zach : 'blue',
     Zayn : 'red'  
   };
+
+  const [filters, setFilters] = useState({
+    text : true,
+    pictures : true,
+    songs : true
+  });
 
   useEffect(() => {
     fetch('http://localhost:5000/posts')
@@ -223,39 +231,47 @@ function App() {
       const color = (post.post_user === 'Zach' ? colors.Zach : colors.Zayn);
 
       if (post.post_type === "song") {
-        return (
-          <div className='container p-2 mt-5 w-100' style={{border:'2px black solid', width:'auto'}}>
-            <div className="d-flex justify-content-between align-items-center" > 
-              <p className='mb-2' style={{color:color}}>{post.post_user}</p>
-              <p key={index} onClick={(e) => deletePost(e, post.id)}>X</p> 
-            </div>
-            {SpotifyEmbed(post.post_content)}
-          </div>          
-        )
+        if (filters.songs) {
+          return (
+            <div className='container p-2 mt-5 w-100' style={{border:'2px black dashed', width:'auto'}}>
+              <div className="d-flex justify-content-between align-items-center" > 
+                <p className='mb-2' style={{color:color}}>{post.post_user}</p>
+                <p key={index} style={{cursor: "default"}} onClick={(e) => deletePost(e, post.id)}>X</p> 
+              </div>
+              {SpotifyEmbed(post.post_content)}
+            </div>          
+          )
+        }
       }
 
       else if (post.post_type === "picture") {
-        return (
-          <div className='container p-2 mt-5 w-100' style={{border:'2px black solid', width:'5vw'}}>
-            <div className="d-flex justify-content-between align-items-center"> 
-              <p className='mb-2' style={{color:color}}>{post.post_user}</p>
-              <p key={index} onClick={(e) => deletePost(e, post.id)}>X</p>
+        if (filters.pictures) {
+          return (
+            <div className='container p-2 mt-5 w-100' style={{border:'2px black dashed', width:'5vw'}}>
+              <div className="d-flex justify-content-between align-items-center"> 
+                <p className='mb-2' style={{color:color}}>{post.post_user}</p>
+                <p key={index} style={{cursor: "default"}} onClick={(e) => deletePost(e, post.id)}>X</p>
+              </div>
+              <img src={post.post_content} style={{ maxWidth: '100%', height: 'auto' }}/>
             </div>
-            <img src={post.post_content} style={{ maxWidth: '100%', height: 'auto' }}/>
-          </div>
-        )
+          )
+        }
+
       }
 
       else {
-        return(
-          <div className='container p-2 mt-5 w-100' style={{border:'2px black solid', width:'20vw', wordWrap:'break-word', overflowWrap:'break-word'}}>
-            <div className="d-flex justify-content-between align-items-center" > 
-              <p className='mb-2' style={{color:color}}>{post.post_user}</p>
-              <p key={index} onClick={(e) => deletePost(e, post.id)}>X</p>
-            </div>
-            <p>{post.post_content}</p>
-          </div> 
-        )
+        if (filters.text) {
+          return(
+            <div className='container p-2 mt-5 w-100' style={{border:'2px black dashed', width:'20vw', wordWrap:'break-word', overflowWrap:'break-word'}}>
+              <div className="d-flex justify-content-between align-items-center" > 
+                <p className='mb-2' style={{color:color}}>{post.post_user}</p>
+                <p key={index} style={{cursor: "default"}} onClick={(e) => deletePost(e, post.id)}>X</p>
+              </div>
+              <p>{post.post_content}</p>
+            </div> 
+          )
+        }
+
       }
 
       
@@ -287,9 +303,89 @@ function App() {
       }
   }
 
+  const handleSettingsChange = (e) => {
+      if (e.target.value === "filterBy") {
+        setFilterChecklistVisible(true);
+      }
+
+  }
+
+  const handleFilterChange = (e) => {
+      const changedFilter = e.target.value;
+      if (changedFilter === 'filterText') setFilters((prev) =>  ({...prev, text: !prev.text}));
+      else if (changedFilter === 'filterPictures') setFilters((prev) =>  ({...prev, pictures: !prev.pictures}));
+      else if (changedFilter === 'filterSong') setFilters((prev) =>  ({...prev, songs: !prev.songs}));
+      else if (changedFilter === 'filterDone') setFilterChecklistVisible(false);
+
+      createPosts(posts);
+  }
+
   return (
 
-    <div className='d-flex flex-column min-vh-100' > 
+    <div className='d-flex flex-column min-vh-100' >
+      {filterChecklistVisisble && (
+      <div className="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center" style={{
+        zIndex: 10,
+        backdropFilter: 'blur(8px)',
+        width: '100%',
+        height:'100%',
+        position: 'absolute', 
+        top: '50%', 
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'rgba(255, 255, 255, 0.3)'
+        }}>
+          <div className='card' style={{width:'12vw', height:'18vw', border:'1px black dashed', borderRadius:'0'}}>
+            <h1 className='card-title text-center m-2'>Filters</h1>
+            <div className='card-body mt-3'>
+              <div className="form-check m-3">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="checkbox1"
+                  value='filterText'
+                  checked={filters.text}
+                  onChange={handleFilterChange}
+                />
+                <label className="form-check-label" htmlFor="checkbox1">
+                  Text
+                </label>
+              </div>
+
+              <div className="form-check m-3">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="checkbox2"
+                  value='filterPictures'
+                  checked={filters.pictures}
+                  onChange={handleFilterChange}
+                />
+                <label className="form-check-label" htmlFor="checkbox2">
+                  Pictures
+                </label>
+              </div>
+
+              <div className="form-check m-3">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="checkbox3"
+                  value='filterSong'
+                  checked={filters.songs}
+                  onChange={handleFilterChange}
+                />
+                <label className="form-check-label" htmlFor="checkbox3">
+                  Songs
+                </label>
+              </div>
+            </div>
+            <div className="card-footer text-center">
+              <button className="btn" value="filterDone" onClick={handleFilterChange}>Done</button>
+            </div>
+          </div>
+        </div>
+      )} 
       {!isLoggedIn && (
         <div className="position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center" style={{
           zIndex: 10,
@@ -374,14 +470,16 @@ function App() {
         )
       }
         
-      {isLoggedIn && (
+      {isLoggedIn && !passwordInputVisible &&(
         <>     
-        <div className='mt-5 ms-5' style={{width:'5vw'}}>
+        <div className='m-5' style={{display: 'flex', justifyContent: 'space-between'}}>
           <select className='form-select' style={{width:'5vw', border: '1px solid black'}} onChange={handleDropDownChange}>
             <option className='form-control' value="" selected disabled hidden>+</option>
             <option className='form-control'  value="song">Song</option>
             <option className='form-control' value="picture">Picture</option>
           </select>
+          <button className='btn' value="filterBy" style={{width:'6vw', border: '1px solid black'}} onClick={handleSettingsChange}>Filters</button>
+          
         </div>
         <div style={{justifyContent:'center'}}>
           <div>
