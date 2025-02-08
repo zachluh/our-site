@@ -28,3 +28,4 @@ yarn-error.log*
 /our-site-backend/static/
 /our-site/.env.local
 /our-site/.env
+/our-site-backend/.env

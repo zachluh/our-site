@@ -7,10 +7,15 @@ const path = require('path');
 const app = express();
 const port = 5000;
 
+require("dotenv").config()
+
 app.use(cors());
 app.use(express.json());
 
-const sequelize = new Sequelize('mysql://root:Y4dgirxs!@localhost:3306/oursiteDB');
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'mysql',  // Tell Sequelize to use MySQL
+  protocol: 'mysql', // Optional, but can help with certain setups
+});
 
 async function testConnection() {
   try {
