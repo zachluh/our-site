@@ -30,7 +30,7 @@ function App() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:5000/posts')
+    fetch('https://our-site-production.up.railway.app/posts')
       .then(response => response.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -90,7 +90,7 @@ function App() {
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
 
-      fetch('http://localhost:5000/upload', {method:'POST', body:formData})
+      fetch('https://our-site-production.up.railway.app/upload', {method:'POST', body:formData})
       .then((response) => response.json())
       .then((data) => {
         console.log('File uploaded successfully:', data);
@@ -98,10 +98,10 @@ function App() {
         setPosts((prev) => {
 
           const imageURL = data.fileUrl;
-          const newPosts = [{post_type:'picture', post_content: `http://localhost:5000${imageURL}`, post_user: currentUser}, ...prev];
+          const newPosts = [{post_type:'picture', post_content: `https://our-site-production.up.railway.app${imageURL}`, post_user: currentUser}, ...prev];
 
           createPosts(newPosts);
-          updatePostDatabase('picture', `http://localhost:5000${imageURL}`, currentUser);
+          updatePostDatabase('picture', `https://our-site-production.up.railway.app${imageURL}`, currentUser);
           return newPosts;
           
         });
@@ -197,7 +197,7 @@ function App() {
 
   const deletePostFromDatabase = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/delete/${id}`, {
+      const response = await fetch(`https://our-site-production.up.railway.app/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json', 
@@ -282,7 +282,7 @@ function App() {
 
   const updatePostDatabase = async (type, content, user) => {
       try {
-        const response = await fetch('http://localhost:5000/add-post', {
+        const response = await fetch('https://our-site-production.up.railway.app/add-post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
