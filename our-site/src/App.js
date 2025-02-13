@@ -335,7 +335,7 @@ function App() {
         transform: 'translate(-50%, -50%)',
         backgroundColor: 'rgba(255, 255, 255, 0.3)'
         }}>
-          <div className='card' style={{width:'12vw', height:'18vw', border:'1px black dashed', borderRadius:'0'}}>
+          <div className='card' style={{width:'auto', height:'auto', border:'1px black dashed', borderRadius:'0'}}>
             <h1 className='card-title text-center m-2'>Filters</h1>
             <div className='card-body mt-3'>
               <div className="form-check m-3">
@@ -398,8 +398,8 @@ function App() {
           transform: 'translate(-50%, -50%)',
           backgroundColor: 'rgba(255, 255, 255, 0.3)'
           }}>
-            <form name='userForm' className='card p-5' style={{width:'15vw'}}>
-              <p className='card-title pb-2'>Who are you?</p>
+            <form name='userForm' className='card p-5' style={{width:'auto'}}>
+              <p className='card-title pb-2 text-center'>Who are you?</p>
               <button className='form-control mb-1' name="zayn" onClick={handleLogin}>Zayn</button>
               <button className='form-control' name="zach" onClick={handleLogin}>Zach</button>
             </form>
@@ -421,7 +421,7 @@ function App() {
           }}>
             <form name='passwordForm' className='card p-5' onKeyDown={handleLogin} style={{width:'auto'}}>
               <p className='card-title pb-2'>Enter your password:</p>
-              <input name='passwordInput' className='form-control' placeholder='Password...' style={{width:'15vw', height:'2vw'}}/>
+              <input name='passwordInput' className='form-control' placeholder='Password...' style={{width:'100%', height:'5%'}}/>
 
             </form>
             
@@ -440,7 +440,7 @@ function App() {
           backgroundColor: 'rgba(255, 255, 255, 0.3)'
           }}>
             <form name='songForm' onKeyDown={handleFormSubmissions}>
-              <input name='songInput' className='form-control' placeholder='Enter song URL...' style={{width:'15vw', height:'2vw'}}/>
+              <input name='songInput' className='form-control' placeholder='Enter song URL...' style={{width:'auto', height:'10%'}}/>
             </form>
             
         </div>
@@ -463,7 +463,7 @@ function App() {
             backgroundColor: 'rgba(255, 255, 255, 0.3)'
             }}>
               <form name='pictureForm' onKeyDown={handleFormSubmissions}>
-                <input onChange={handleFormSubmissions} type="file" name='pictureInput' className='form-control' placeholder='Choose picture' style={{width:'15vw', height:'2vw'}}/>
+                <input onChange={handleFormSubmissions} type="file" name='pictureInput' className='form-control' placeholder='Choose picture' style={{width:'auto', height:'10%'}}/>
               </form>
               
           </div>
@@ -473,12 +473,12 @@ function App() {
       {isLoggedIn && !passwordInputVisible &&(
         <>     
         <div className='m-5' style={{display: 'flex', justifyContent: 'space-between'}}>
-          <select className='form-select' style={{width:'5vw', border: '1px solid black'}} onChange={handleDropDownChange}>
+          <select className='form-select' style={{width:'auto', border: '1px solid black'}} onChange={handleDropDownChange}>
             <option className='form-control' value="" selected disabled hidden>+</option>
             <option className='form-control'  value="song">Song</option>
             <option className='form-control' value="picture">Picture</option>
           </select>
-          <button className='btn' value="filterBy" style={{width:'6vw', border: '1px solid black'}} onClick={handleSettingsChange}>Filters</button>
+          <button className='btn' value="filterBy" style={{width:'auto', border: '1px solid black'}} onClick={handleSettingsChange}>Filters</button>
           
         </div>
         <div style={{justifyContent:'center'}}>
